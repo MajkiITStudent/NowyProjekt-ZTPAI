@@ -26,7 +26,7 @@
 <!--NAV-->
 <nav class="navbar navbar-expand-lg navbar-dark " style="background: transparent linear-gradient(180deg, #FFFFFF 0%, #272B3C 0%, #2175B9 49%, #6192E1 72%, #6DC7D0 100%) 0% 0% no-repeat padding-box">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{{ path("index") }}">
             <img src="assets/images/logo.svg" width="215" height="50" alt="">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,10 +47,10 @@
                     <a class="nav-link" href="#">Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Login</a>
+                    <a class="nav-link" href="{{ path("app_login") }}">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a class="nav-link" href="{{ path("app_logout") }}">Logout</a>
                 </li>
             </ul>
         </div>
