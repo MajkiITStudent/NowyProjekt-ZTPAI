@@ -23,6 +23,7 @@ class UserFixtures extends Fixture
         $user->setEmail('admin@gmail.com');
         $user->setRoles(['ROLE_ADMIN']);
         $user->setPassword($this->passwordEncoder->encodePassword($user, 'admin'));
+        $user->setIsBanned(0);
         $manager->persist($user);
         $manager->flush();
     }

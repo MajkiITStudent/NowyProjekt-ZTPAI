@@ -47,6 +47,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $events;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_banned;
+
+    /**
+     * @ORM\OneToOne(targetEntity=UserDetails::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $userDetails;
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
@@ -174,6 +184,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $event->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsBanned(): ?bool
+    {
+        return $this->is_banned;
+    }
+
+    public function setIsBanned(bool $is_banned): self
+    {
+        $this->is_banned = $is_banned;
+
+        return $this;
+    }
+
+    public function getUserDetails(): ?UserDetails
+    {
+        return $this->userDetails;
+    }
+
+    public function setUserDetails(UserDetails $userDetails): self
+    {
+        // set the owning side of the relation if necessary
+        if ($userDetails->getUser() !== $this) {
+            $userDetails->setUser($this);
+        }
+
+        $this->userDetails = $userDetails;
 
         return $this;
     }
