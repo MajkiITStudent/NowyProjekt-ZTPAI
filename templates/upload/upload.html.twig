@@ -12,5 +12,15 @@
             {{ form_row(uploadForm.people_needed) }}
             <input type="submit" value="Create An Event" class="form-control btn btn-success w-25">
         {{ form_end(uploadForm) }}
+        {% for mess in app.flashes('success') %}
+            <div class="alert-success">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        {% for mess in app.flashes('error') %}
+            <div class="alert-danger">
+                {{ mess }}
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
