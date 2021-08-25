@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Add New Event{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {{ form_start(uploadForm) }}
+        {{ form_end(uploadForm) }}
+    </div>
+{% endblock %}
