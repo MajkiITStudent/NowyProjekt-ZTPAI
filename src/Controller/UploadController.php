@@ -23,17 +23,27 @@ class UploadController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             if($this->getUser()){
-                $entityEvent = new Event();
-                $entityEvent->setUser($this->getUser());
-                $entityEvent->setFilename($form->get('filename')->getData());
-                $entityEvent->setUploadedAt(new \DateTime());
-                $entityEvent->setDescription($form->get('description')->getData());
-                $entityEvent->setSportType($form->get('sport_type')->getData());
-                $entityEvent->setEventDatetime($form->get('event_datetime')->getData());
-                $entityEvent->setPeopleNeeded($form->get('people_needed')->getData());
+                /** @var  $eventImg */
+                $eventImg = $form -> get('filename')->getData();
+                if($eventImg){
+                    $originalImgName = pathinfo($eventImg->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeName = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalImgName);
+                    $nameToSave = $safeName.'_'.uniqid().'.'.$eventImg->guessExtension();
+                    $eventImg->move('assets/images/events',$nameToSave);
 
-                $entityManager -> persist($entityEvent);
-                $entityManager -> flush();
+                    $entityEvent = new Event();
+                    $entityEvent->setUser($this->getUser());
+                    $entityEvent->setFilename($nameToSave);
+                    $entityEvent->setUploadedAt(new \DateTime());
+                    $entityEvent->setDescription($form->get('description')->getData());
+                    $entityEvent->setSportType($form->get('sport_type')->getData());
+                    $entityEvent->setEventDatetime($form->get('event_datetime')->getData());
+                    $entityEvent->setPeopleNeeded($form->get('people_needed')->getData());
+
+                    $entityManager -> persist($entityEvent);
+                    $entityManager -> flush();
+
+                }
             }
         }
 
