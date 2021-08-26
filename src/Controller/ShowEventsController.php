@@ -57,7 +57,8 @@ class ShowEventsController extends AbstractController
      * @param int $id
      * @return RedirectResponse
      */
-    public function removeEvent(int $id){
+    public function removeEvent(int $id): RedirectResponse
+    {
         $entityManager = $this->getDoctrine()->getManager();
         $eventToRemove = $entityManager->getRepository(Event::class)->find($id);
 
