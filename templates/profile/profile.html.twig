@@ -4,6 +4,26 @@
 
 {% block body %}
     <div class="container">
+        {% for mess in app.flashes('success') %}
+            <div class="alert-success text-center">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        {% for mess in app.flashes('error') %}
+            <div class="alert-danger text-center">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        {% for detail in allDetails %}
+            {% if app.user == detail.user %}
+                <p class="card-text">Name : {{ detail.name }}</p>
+                <p class="card-text">Surname : {{ detail.surname }}</p>
+                <p class="card-text">Country : {{ detail.country }}</p>
+                <p class="card-text">City : {{ detail.city }}</p>
+                <p class="card-text">Age : {{ detail.age }}</p>
+                <p class="card-text">Favourite Sport : {{ detail.favouriteSport }}</p>
+            {% endif %}
+        {% endfor %}
         {{ form_start(profileForm, {'attr': {'class': 'd-flex flex-column pt-2 pb-2 align-items-center'}}) }}
             {{ form_row(profileForm.name) }}
             {{ form_row(profileForm.surname) }}
