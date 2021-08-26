@@ -31,7 +31,7 @@
                             <div class="card-footer">
                                 <a href="#" class="badge badge-info">Author Profile</a>
                                 <a href="{{ path("take_part", {'id': event.id}) }}" class="badge badge-success">Take Part</a>
-                                <a href="#" class="badge badge-danger">Delete</a>
+                                <a href="{{ path("remove_event", {'id': event.id}) }}" class="badge badge-danger">Delete</a>
                             </div>
                         </div>
                     </div>
