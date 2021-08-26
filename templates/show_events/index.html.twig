@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - All Events{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="mt-3 mb-3">All upcoming events</h1>
+    {% for event in allEvents %}
+        {{ event.description }}
+    {% endfor %}
+</div>
+{% endblock %}
