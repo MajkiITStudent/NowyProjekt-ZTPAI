@@ -81,4 +81,5 @@ class ShowEventsController extends AbstractController
         }
         return $this->redirectToRoute("show_events");
     }
+
 }
