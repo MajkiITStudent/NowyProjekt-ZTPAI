@@ -4,9 +4,30 @@
 
 {% block body %}
 <div class="container">
-    <h1 class="mt-3 mb-3">All upcoming events</h1>
-    {% for event in allEvents %}
-        {{ event.description }}
-    {% endfor %}
+    <h1 class="mt-2 mb-3 text-center">All upcoming events</h1>
+    <div class="row">
+        {% for event in allEvents %}
+            <div class="col-sm-5">
+                <div class="card-deck" style="width: 20rem; height: 40rem">
+                    <div class="card d-flex justify-content-between">
+                        <img class="card-img-top" src="assets/images/events/{{ event.filename }}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.description }}</h5>
+                            <p class="card-text">Created by - {{ event.user.username }}</p>
+                            <p class="card-text">Sport - {{ event.sportType }}</p>
+                            <p class="card-text">Post created - {{ event.uploadedAt|date('d.m.Y H:i:s') }}</p>
+                            <p class="card-text">Game starts - {{ event.eventDatetime|date('d.m.Y H:i:s') }}</p>
+                            <p class="card-text">People needed - {{ event.peopleNeeded }}</p>
+                            <div class="card-footer">
+                                <a href="#" class="badge badge-info">Author Profile</a>
+                                <a href="#" class="badge badge-success">Take Part</a>
+                                <a href="#" class="badge badge-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
