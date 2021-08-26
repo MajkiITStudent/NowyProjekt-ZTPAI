@@ -4,6 +4,16 @@
 
 {% block body %}
 <div class="container">
+    {% for mess in app.flashes('success') %}
+        <div class="alert-success text-center">
+            {{ mess }}
+        </div>
+    {% endfor %}
+    {% for mess in app.flashes('error') %}
+        <div class="alert-danger text-center">
+            {{ mess }}
+        </div>
+    {% endfor %}
     <h1 class="mt-2 mb-3 text-center">All upcoming events</h1>
     <div class="row">
         {% for event in allEvents %}
@@ -20,7 +30,7 @@
                             <p class="card-text">People needed - {{ event.peopleNeeded }}</p>
                             <div class="card-footer">
                                 <a href="#" class="badge badge-info">Author Profile</a>
-                                <a href="#" class="badge badge-success">Take Part</a>
+                                <a href="{{ path("take_part", {'id': event.id}) }}" class="badge badge-success">Take Part</a>
                                 <a href="#" class="badge badge-danger">Delete</a>
                             </div>
                         </div>
