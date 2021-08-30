@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Author Details{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% for mess in app.flashes('success') %}
+            <div class="alert-success text-center">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        {% for mess in app.flashes('error') %}
+            <div class="alert-danger text-center">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        {{ eventDescription }}
+        {{ authorName }}
+        {{ authorSurname }}
+    </div>
+{% endblock %}

@@ -31,7 +31,7 @@
                                         <p class="card-text">Game starts - {{ event.eventDatetime|date('d.m.Y H:i:s') }}</p>
                                         <p class="card-text">People needed - {{ event.peopleNeeded }}</p>
                                         <div class="card-footer">
-                                            <a href="{{ path("profile") }}" class="badge badge-info">Author Profile</a>
+                                            <a href="{{ path("show_details", {'id': event.id}) }}" class="badge badge-info">Author Profile</a>
                                             {% if app.user != event.user and app.user %}
                                                 <a href="{{ path("take_part", {'id': event.id}) }}" class="badge badge-success">Take Part</a>
                                             {% endif %}

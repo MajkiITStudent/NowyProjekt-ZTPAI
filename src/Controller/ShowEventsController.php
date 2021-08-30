@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\UserDetails;
 use PHPUnit\Util\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -80,6 +81,42 @@ class ShowEventsController extends AbstractController
             $this->addFlash('error','You are logged out or you are not owner of this event');
         }
         return $this->redirectToRoute("show_events");
+    }
+
+    /**
+     * @Route("/show/details/{id}", name="show_details")
+     * @param int $id
+     * @return Response
+     */
+    public function authorDetails(int $id): Response{
+        $entityManager = $this->getDoctrine()->getManager();
+        $choosedEvent = $entityManager->getRepository(Event::class)->find($id);
+        $authorID = $choosedEvent->getUser()->GetId();
+        $authorDetails = $entityManager->getRepository(UserDetails::class)->findOneBy(['user' => $authorID]);
+        $eventDescription = $choosedEvent->getDescription();
+        $eventSportType = $choosedEvent->getSportType();
+        $eventDateTime = $choosedEvent->getDateTime();
+        $eventPeopleNeeded = $choosedEvent->getPeopleNeeded();
+        $authorName = $authorDetails->getName();
+        $authorSurname = $authorDetails->getSurname();
+        $authorCountry = $authorDetails->getCountry();
+        $authorCity = $authorDetails->getCity();
+        $authorAge = $authorDetails->getAge();
+        $authorFavouriteSport = $authorDetails->getFavouriteSport();
+
+        return $this->render('profile/author.html.twig', [
+            'eventDescription' => $eventDescription,
+            'eventSportType' => $eventSportType,
+            'eventDateTime' => $eventDateTime,
+            'eventPeopleNeeded' => $eventPeopleNeeded,
+            'authorName' => $authorName,
+            'authorSurname' => $authorSurname,
+            'authorCountry' => $authorCountry,
+            'authorCity' => $authorCity,
+            'authorAge' => $authorAge,
+            'authorFavouriteSport' => $authorFavouriteSport
+
+        ]);
     }
 
 }

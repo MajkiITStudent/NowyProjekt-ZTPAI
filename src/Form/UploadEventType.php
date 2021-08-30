@@ -15,7 +15,7 @@ class UploadEventType extends AbstractType
     {
         $builder
             ->add('filename', FileType::class,[
-                'label' => '',
+                'label' => 'Image file',
                 'constraints' =>[
                     new File([
                         'maxSize' => '4M',
