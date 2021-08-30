@@ -36,7 +36,7 @@ class ShowEventsController extends AbstractController
         $takePartAtEvent = $entityManager->getRepository(Event::class)->find($id);
         $howMany = $takePartAtEvent->getPeopleNeeded();
 
-        if($this->getUser()){
+        if($this->getUser() && $this->getUser() != $takePartAtEvent->getUser()){
             try{
                 $takePartAtEvent->setPeopleNeeded($howMany -1);
                 $entityManager->persist($takePartAtEvent);
@@ -46,7 +46,7 @@ class ShowEventsController extends AbstractController
                 $this->addFlash('error','Something go wrong :(');
             }
         }else{
-            $this->addFlash('error','You must be logged in to do perform action');
+            $this->addFlash('error','You must be logged in / you cant take part in your own event');
         }
 
         return $this->redirectToRoute("show_events");

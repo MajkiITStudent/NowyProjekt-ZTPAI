@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfileController!{% endblock %}
+{% block title %}{{ parent() }} - Profile{% endblock %}
 
 {% block body %}
     <div class="container">
@@ -24,14 +24,15 @@
                 <p class="card-text">Favourite Sport : {{ detail.favouriteSport }}</p>
             {% endif %}
         {% endfor %}
-        {{ form_start(profileForm, {'attr': {'class': 'd-flex flex-column pt-2 pb-2 align-items-center'}}) }}
+        {% form_theme profileForm 'bootstrap_5_layout.html.twig' %}
+        {{ form_start(profileForm, {'attr': {'class': 'd-flex flex-column pt-2 pb-4 align-items-center'}}) }}
             {{ form_row(profileForm.name) }}
             {{ form_row(profileForm.surname) }}
             {{ form_row(profileForm.country) }}
             {{ form_row(profileForm.city) }}
             {{ form_row(profileForm.age) }}
             {{ form_row(profileForm.favourite_sport) }}
-            <input type="submit" value="Update" class="form-control btn btn-success w-25">
+            <input type="submit" value="Update" class="form-control btn btn-success w-auto">
         {{ form_end(profileForm) }}
     </div>
 {% endblock %}
