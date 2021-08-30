@@ -4,13 +4,14 @@
 
 {% block body %}
     <div class="container">
-        {{ form_start(uploadForm, {'attr': {'class': 'd-flex flex-column pt-2 pb-2 align-items-center'}}) }}
+        {% form_theme uploadForm 'bootstrap_5_layout.html.twig' %}
+        {{ form_start(uploadForm, {'attr': {'class': 'd-flex flex-column pt-2 pb-4 align-items-center'}}) }}
             {{ form_row(uploadForm.filename) }}
             {{ form_row(uploadForm.description) }}
             {{ form_row(uploadForm.sport_type) }}
             {{ form_row(uploadForm.event_datetime) }}
             {{ form_row(uploadForm.people_needed) }}
-            <input type="submit" value="Create An Event" class="form-control btn btn-success w-25">
+            <input type="submit" value="Create An Event" class="form-control btn btn-success w-auto ">
         {{ form_end(uploadForm) }}
         {% for mess in app.flashes('success') %}
             <div class="alert-success">
