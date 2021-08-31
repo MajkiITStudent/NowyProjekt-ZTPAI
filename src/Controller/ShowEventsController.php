@@ -10,6 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class ShowEventsController extends AbstractController
 {
@@ -27,7 +28,22 @@ class ShowEventsController extends AbstractController
     }
 
     /**
+     * @Route("/showMy", name="my_events")
+     * @IsGranted("ROLE_USER")
+     */
+    public function showMyEvents(): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $myEvents = $entityManager->getRepository(Event::class)->findBy(['user' => $this->getUser()]);
+
+        return $this->render('show_events/myEvents.html.twig', [
+            'myEvents' => $myEvents
+        ]);
+    }
+
+    /**
      * @Route("/show/take_part/{id}", name="take_part")
+     * @IsGranted("ROLE_USER")
      * @param int $id
      * @return RedirectResponse
      */
@@ -37,7 +53,7 @@ class ShowEventsController extends AbstractController
         $takePartAtEvent = $entityManager->getRepository(Event::class)->find($id);
         $howMany = $takePartAtEvent->getPeopleNeeded();
 
-        if($this->getUser() && $this->getUser() != $takePartAtEvent->getUser()){
+        if($this->getUser() != $takePartAtEvent->getUser()){
             try{
                 $takePartAtEvent->setPeopleNeeded($howMany -1);
                 $entityManager->persist($takePartAtEvent);
@@ -55,6 +71,7 @@ class ShowEventsController extends AbstractController
 
     /**
      * @Route("/show/remove/{id}", name="remove_event")
+     * @IsGranted("ROLE_USER")
      * @param int $id
      * @return RedirectResponse
      */
@@ -63,7 +80,7 @@ class ShowEventsController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $eventToRemove = $entityManager->getRepository(Event::class)->find($id);
 
-        if($this->getUser() && $this->getUser() == $eventToRemove->getUser()){
+        if($this->getUser() == $eventToRemove->getUser()){
             try{
                 $fileToRemove = new Filesystem();
                 $fileToRemove->remove('assets/images/events/'.$eventToRemove->getFilename());
