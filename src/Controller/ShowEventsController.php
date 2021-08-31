@@ -20,10 +20,14 @@ class ShowEventsController extends AbstractController
     public function showEvents(): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $allEvents = $entityManager->getRepository(Event::class)->findAll();
+        $allEvents = $entityManager->getRepository(Event::class)->findAllUpcomingEvents();
+        $completeEvents = $entityManager->getRepository(Event::class)->findAllCompleteEvents();
+        $pastEvents = $entityManager->getRepository(Event::class)->findAllPastEvents();
 
         return $this->render('show_events/showEvents.html.twig', [
-            'allEvents' => $allEvents
+            'allEvents' => $allEvents,
+            'completeEvents' => $completeEvents,
+            'pastEvents' => $pastEvents
         ]);
     }
 
@@ -53,7 +57,7 @@ class ShowEventsController extends AbstractController
         $takePartAtEvent = $entityManager->getRepository(Event::class)->find($id);
         $howMany = $takePartAtEvent->getPeopleNeeded();
 
-        if($this->getUser() != $takePartAtEvent->getUser()){
+        if($this->getUser() != $takePartAtEvent->getUser() && $howMany > 0){
             try{
                 $takePartAtEvent->setPeopleNeeded($howMany -1);
                 $entityManager->persist($takePartAtEvent);
@@ -63,7 +67,7 @@ class ShowEventsController extends AbstractController
                 $this->addFlash('error','Something go wrong :(');
             }
         }else{
-            $this->addFlash('error','You must be logged in / you cant take part in your own event');
+            $this->addFlash('error','You must be logged in / you cant take part in your own event or this event is complete');
         }
 
         return $this->redirectToRoute("show_events");
