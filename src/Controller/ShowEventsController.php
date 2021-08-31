@@ -95,7 +95,7 @@ class ShowEventsController extends AbstractController
         $authorDetails = $entityManager->getRepository(UserDetails::class)->findOneBy(['user' => $authorID]);
         $eventDescription = $choosedEvent->getDescription();
         $eventSportType = $choosedEvent->getSportType();
-        $eventDateTime = $choosedEvent->getDateTime();
+        $eventDateTime = $choosedEvent->getEventDateTime();
         $eventPeopleNeeded = $choosedEvent->getPeopleNeeded();
         $authorName = $authorDetails->getName();
         $authorSurname = $authorDetails->getSurname();
