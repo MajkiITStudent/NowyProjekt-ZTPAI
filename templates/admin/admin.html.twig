@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Admin Panel{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 d-flex flex-column align-items-center">
+        {% for mess in app.flashes('success') %}
+            <div class="alert-success text-center">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        {% for mess in app.flashes('error') %}
+            <div class="alert-danger text-center">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        <div class="collumn text-center">
+            <h2>All Events</h2>
+            {% for event in allEvents %}
+            <div class="card-header" style="width: 18rem;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <p class="card-text">Event id - {{ event.id }}</p>
+                        <p class="card-text">Event uploaded at - {{ event.uploadedAt|date('d.m.Y H:i:s') }}</p>
+                        <p class="card-text">Event starts at - {{ event.eventDatetime|date('d.m.Y H:i:s') }}</p>
+                        <a href="{{ path("remove_event", {'id': event.id}) }}" class="badge badge-danger">Delete</a>
+                    </li>
+                </ul>
+            </div>
+            {% endfor %}
+            <h2>All Users</h2>
+            {% for user in allUsers %}
+            <div class="card-header" style="width: 18rem;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <p class="card-text">User id - {{ user.id }}</p>
+                        <p class="card-text">Username - {{ user.username }}</p>
+                        <p class="card-text">User email - {{ user.email }}</p>
+                        <a href="#" class="badge badge-info">Ban User</a>
+                    </li>
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

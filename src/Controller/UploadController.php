@@ -52,6 +52,10 @@ class UploadController extends AbstractController
 
                 }
             }
+            else{
+                $this->addFlash('error','You need to be logged in to create new event');
+                return $this->redirectToRoute('index');
+            }
         }
 
         return $this->render('upload/upload.html.twig', [

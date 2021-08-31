@@ -84,7 +84,7 @@ class ShowEventsController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $eventToRemove = $entityManager->getRepository(Event::class)->find($id);
 
-        if($this->getUser() == $eventToRemove->getUser()){
+        if($this->getUser() == $eventToRemove->getUser() || $this->getUser()->getUserIdentifier() == 'admin'){
             try{
                 $fileToRemove = new Filesystem();
                 $fileToRemove->remove('assets/images/events/'.$eventToRemove->getFilename());
