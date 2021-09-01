@@ -56,14 +56,9 @@ class Event
     private $people_needed;
 
     /**
-     * @ORM\ManyToMany(targetEntity=EventParticipants::class, mappedBy="event")
+     * @ORM\OneToOne(targetEntity=EventParticipants::class, mappedBy="event", cascade={"persist", "remove"})
      */
     private $eventParticipants;
-
-    public function __construct()
-    {
-        $this->eventParticipants = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -159,30 +154,21 @@ class Event
         return $this;
     }
 
-    /**
-     * @return Collection|EventParticipants[]
-     */
-    public function getEventParticipants(): Collection
+    public function getEventParticipants(): ?EventParticipants
     {
         return $this->eventParticipants;
     }
 
-    public function addEventParticipant(EventParticipants $eventParticipant): self
+    public function setEventParticipants(EventParticipants $eventParticipants): self
     {
-        if (!$this->eventParticipants->contains($eventParticipant)) {
-            $this->eventParticipants[] = $eventParticipant;
-            $eventParticipant->addEvent($this);
+        // set the owning side of the relation if necessary
+        if ($eventParticipants->getEvent() !== $this) {
+            $eventParticipants->setEvent($this);
         }
+
+        $this->eventParticipants = $eventParticipants;
 
         return $this;
     }
 
-    public function removeEventParticipant(EventParticipants $eventParticipant): self
-    {
-        if ($this->eventParticipants->removeElement($eventParticipant)) {
-            $eventParticipant->removeEvent($this);
-        }
-
-        return $this;
-    }
 }

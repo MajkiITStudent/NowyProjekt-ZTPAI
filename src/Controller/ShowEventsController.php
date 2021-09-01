@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\EventParticipants;
 use App\Entity\UserDetails;
 use PHPUnit\Util\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -55,16 +56,34 @@ class ShowEventsController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $takePartAtEvent = $entityManager->getRepository(Event::class)->find($id);
+        $ifExists = $entityManager->getRepository(EventParticipants::class)->findOneBy(['event' => $id]);
         $howMany = $takePartAtEvent->getPeopleNeeded();
 
         if($this->getUser() != $takePartAtEvent->getUser() && $howMany > 0){
-            try{
-                $takePartAtEvent->setPeopleNeeded($howMany -1);
-                $entityManager->persist($takePartAtEvent);
-                $entityManager->flush();
-                $this->addFlash('success','Success, you will atend this event!');
-            }catch(Exception $e){
-                $this->addFlash('error','Something go wrong :(');
+            if($ifExists instanceof EventParticipants){
+                try{
+                    $ifExists->addUser($this->getUser());
+                    $takePartAtEvent->setPeopleNeeded($howMany -1);
+                    $entityManager->persist($ifExists);
+                    $entityManager->persist($takePartAtEvent);
+                    $entityManager->flush();
+                    $this->addFlash('success','Success, you will atend this event!');
+                }catch(Exception $e){
+                    $this->addFlash('error','Something go wrong :(');
+                }
+            }else{
+                try{
+                    $eventParticipants = new EventParticipants();
+                    $eventParticipants->setEvent($takePartAtEvent);
+                    $eventParticipants->addUser($this->getUser());
+                    $takePartAtEvent->setPeopleNeeded($howMany -1);
+                    $entityManager->persist($eventParticipants);
+                    $entityManager->persist($takePartAtEvent);
+                    $entityManager->flush();
+                    $this->addFlash('success','Success, you will atend this event!');
+                }catch(Exception $e){
+                    $this->addFlash('error','Something go wrong :(');
+                }
             }
         }else{
             $this->addFlash('error','You must be logged in / you cant take part in your own event or this event is complete');
