@@ -59,9 +59,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $userDetails;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=EventParticipants::class, mappedBy="user")
+     */
+    private $eventParticipants;
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
+        $this->eventParticipants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -215,6 +221,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->userDetails = $userDetails;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|EventParticipants[]
+     */
+    public function getEventParticipants(): Collection
+    {
+        return $this->eventParticipants;
+    }
+
+    public function addEventParticipant(EventParticipants $eventParticipant): self
+    {
+        if (!$this->eventParticipants->contains($eventParticipant)) {
+            $this->eventParticipants[] = $eventParticipant;
+            $eventParticipant->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventParticipant(EventParticipants $eventParticipant): self
+    {
+        if ($this->eventParticipants->removeElement($eventParticipant)) {
+            $eventParticipant->removeUser($this);
+        }
 
         return $this;
     }
