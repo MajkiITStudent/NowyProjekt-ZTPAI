@@ -6,11 +6,13 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -47,9 +49,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $events;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_banned = 0;
+
+    /**
+     * @ORM\OneToOne(targetEntity=UserDetails::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $userDetails;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=EventParticipants::class, mappedBy="user")
+     */
+    private $eventParticipants;
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
+        $this->eventParticipants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,4 +195,61 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getIsBanned(): ?bool
+    {
+        return $this->is_banned;
+    }
+
+    public function setIsBanned(bool $is_banned): self
+    {
+        $this->is_banned = $is_banned;
+
+        return $this;
+    }
+
+    public function getUserDetails(): ?UserDetails
+    {
+        return $this->userDetails;
+    }
+
+    public function setUserDetails(UserDetails $userDetails): self
+    {
+        // set the owning side of the relation if necessary
+        if ($userDetails->getUser() !== $this) {
+            $userDetails->setUser($this);
+        }
+
+        $this->userDetails = $userDetails;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|EventParticipants[]
+     */
+    public function getEventParticipants(): Collection
+    {
+        return $this->eventParticipants;
+    }
+
+    public function addEventParticipant(EventParticipants $eventParticipant): self
+    {
+        if (!$this->eventParticipants->contains($eventParticipant)) {
+            $this->eventParticipants[] = $eventParticipant;
+            $eventParticipant->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventParticipant(EventParticipants $eventParticipant): self
+    {
+        if ($this->eventParticipants->removeElement($eventParticipant)) {
+            $eventParticipant->removeUser($this);
+        }
+
+        return $this;
+    }
+
 }

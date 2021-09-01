@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Author Details{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        {% for mess in app.flashes('success') %}
+            <div class="alert-success text-center">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        {% for mess in app.flashes('error') %}
+            <div class="alert-danger text-center">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        <div class="row ">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    Event
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Description - {{ eventDescription }}</li>
+                    <li class="list-group-item">Sport Type - {{ eventSportType }}</li>
+                    <li class="list-group-item">Event Begins - {{ eventDateTime|date('d.m.Y H:i:s') }}</li>
+                    <li class="list-group-item">People Needed - {{ eventPeopleNeeded }}</li>
+                </ul>
+            </div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    Author
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Name - {{ authorName }}</li>
+                    <li class="list-group-item">Surname - {{ authorSurname }}</li>
+                    <li class="list-group-item">Country - {{ authorCountry }}</li>
+                    <li class="list-group-item">City - {{ authorCity }}</li>
+                    <li class="list-group-item">Age - {{ authorAge }}</li>
+                    <li class="list-group-item">Favourite Sport - {{ authorFavouriteSport }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @method Event|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,11 +21,10 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    // /**
-    //  * @return Event[] Returns an array of Event objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Event[] Returns an array of Event objects
+     */
+    public function findByExampleField($value): array
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.exampleField = :val')
@@ -34,9 +35,12 @@ class EventRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
 
-    /*
+
+
+    /**
+     * @throws NonUniqueResultException
+     */
     public function findOneBySomeField($value): ?Event
     {
         return $this->createQueryBuilder('e')
@@ -46,5 +50,34 @@ class EventRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    */
+
+    public function findAllCompleteEvents(){
+        return $this->createQueryBuilder('e')
+            ->where('e.people_needed = 0')
+            ->orderBy('e.uploaded_at', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllPastEvents(){
+        $now = new \DateTime('now');
+        return $this->createQueryBuilder('e')
+            ->where('e.event_datetime < :now')
+            ->setParameter('now', $now)
+            ->orderBy('e.uploaded_at', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllUpcomingEvents(){
+        $now = new \DateTime('now');
+        return $this->createQueryBuilder('e')
+            ->where('e.event_datetime > :now')
+            ->setParameter('now', $now)
+            ->orderBy('e.uploaded_at', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 }

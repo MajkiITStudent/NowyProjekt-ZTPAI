@@ -3,8 +3,36 @@
 {% block title %}{{ parent() }} - Mainpage{% endblock %}
 
 {% block body %}
-<h1>{{ liczba }}</h1>
-    <h1>{{ liczba }}</h1>
-    <h1>{{ liczba }}</h1>
-    <h1>{{ liczba }}</h1>
+    <div class="container">
+        {% for mess in app.flashes('success') %}
+            <div class="alert-success text-center">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        {% for mess in app.flashes('error') %}
+            <div class="alert-danger text-center">
+                {{ mess }}
+            </div>
+        {% endfor %}
+        <div class="card mt-5">
+            <div class="card-header text-center">
+                Hello on our website! Here you can decide what to do next =>
+            </div>
+            <div class="d-flex flex-row">
+                <div class="card-body">
+                    <h5 class="card-title">Create a new account for free</h5>
+                    <img src="{{ asset('assets/images/026-student.png') }}" width="100" height="100" class="img-fluid"/>
+                    <p class="card-text">Be a part of our community right now!</p>
+                    <a href="{{ path("app_register") }}" class="btn btn-primary">New Account</a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">If you are already signed in, create a new event</h5>
+                    <img src="{{ asset('assets/images/017-notebook.png') }}" width="100" height="100" class="img-fluid"/>
+                    <p class="card-text">Create a new sport event and share sport interests with others!</p>
+                    <a href="{{ path("add_event") }}" class="btn btn-primary">New Event</a>
+                </div>
+            </div>
+        </div>
+        <div>Icons made by <a href="https://www.flaticon.com/authors/pixelmeetup" title="Pixelmeetup">Pixelmeetup</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    </div>
 {% endblock %}
