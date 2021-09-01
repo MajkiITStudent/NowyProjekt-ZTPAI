@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\EventParticipants;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -36,15 +37,18 @@ class EventParticipantsRepository extends ServiceEntityRepository
     }
     */
 
-    /*
+
+    /**
+     * @throws NonUniqueResultException
+     */
     public function findOneBySomeField($value): ?EventParticipants
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
+            ->andWhere('e.event = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }

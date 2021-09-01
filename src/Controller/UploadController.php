@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UploadController extends AbstractController
 {
     /**
-     * @Route("/add", name="add_event")
+     * @Route("/add", name="add_event", methods={"GET","POST"})
      */
     public function upload(Request $request): Response
     {

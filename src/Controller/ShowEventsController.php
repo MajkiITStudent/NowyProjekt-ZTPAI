@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class ShowEventsController extends AbstractController
 {
     /**
-     * @Route("/show", name="show_events")
+     * @Route("/show", name="show_events", methods={"GET"})
      */
     public function showEvents(): Response
     {
@@ -33,7 +33,7 @@ class ShowEventsController extends AbstractController
     }
 
     /**
-     * @Route("/showMy", name="my_events")
+     * @Route("/showMy", name="my_events", methods={"GET"})
      * @IsGranted("ROLE_USER")
      */
     public function showMyEvents(): Response
@@ -47,7 +47,7 @@ class ShowEventsController extends AbstractController
     }
 
     /**
-     * @Route("/show/take_part/{id}", name="take_part")
+     * @Route("/show/take_part/{id}", name="take_part", methods={"POST"})
      * @IsGranted("ROLE_USER")
      * @param int $id
      * @return RedirectResponse
@@ -93,7 +93,7 @@ class ShowEventsController extends AbstractController
     }
 
     /**
-     * @Route("/show/remove/{id}", name="remove_event")
+     * @Route("/show/remove/{id}", name="remove_event", methods={"DELETE","GET"})
      * @IsGranted("ROLE_USER")
      * @param int $id
      * @return RedirectResponse
@@ -124,7 +124,7 @@ class ShowEventsController extends AbstractController
     }
 
     /**
-     * @Route("/show/details/{id}", name="show_details")
+     * @Route("/show/details/{id}", name="show_details", methods={"GET"})
      * @param int $id
      * @return Response
      */
@@ -156,6 +156,23 @@ class ShowEventsController extends AbstractController
             'authorAge' => $authorAge,
             'authorFavouriteSport' => $authorFavouriteSport
 
+        ]);
+    }
+
+    /**
+     * @Route("/showParticipants/{id}", name="event_participants", methods={"GET"})
+     * @param int $id
+     * @return Response
+     * @IsGranted("ROLE_USER")
+     */
+    public function showEventParticipants(int $id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $eventParticipants = $entityManager->getRepository(EventParticipants::class)->findOneBy(['event' => $id]);
+        $users = $eventParticipants->getUser();
+
+        return $this->render('show_events/participants.html.twig', [
+            'users' => $users
         ]);
     }
 

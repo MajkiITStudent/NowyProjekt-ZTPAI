@@ -35,6 +35,7 @@
                                             <a href="{{ path("take_part", {'id': event.id}) }}" class="badge badge-success">Take Part</a>
                                         {% endif %}
                                         {% if app.user == event.user %}
+                                            <a href="{{ path("event_participants", {'id': event.id}) }}" class="badge badge-dark">Show Participants</a>
                                             <a href="{{ path("remove_event", {'id': event.id}) }}" class="badge badge-danger">Delete</a>
                                         {% endif %}
                                     </div>
